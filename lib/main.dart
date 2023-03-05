@@ -4,19 +4,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login/bloc/app_bloc.dart';
 import 'package:login/views/welcome_view/welcom_view.dart';
+import 'repositories/auth_repo.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final authRepository = AuthRepository(); // create an instance of AuthRepository
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -25,12 +26,18 @@ class MyApp extends StatelessWidget {
       ),
     );
     return BlocProvider(
-      create: (context) => AppBloc(),
+      create: (context) => AppBloc(authRepository),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(primarySwatch: Colors.blue),
-          home: WelcomeView()),
+        title: 'Flutter Demo',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: const WelcomeView(),
+      ),
     );
   }
 }
+
+
+
+
+

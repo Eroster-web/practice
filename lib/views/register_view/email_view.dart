@@ -65,8 +65,9 @@ class EmailView extends StatelessWidget {
                           return TextField(
                             controller: emailcontroller,
                             onSubmitted: (value) {
-                              context.read<AppBloc>().emit(AppStateLoggedOut(
-                                  isLoading: false, successful: false));
+                              context
+                                  .read<AppBloc>()
+                                  .add(const AppEventLogOut());
                               Navigator.push(
                                   context,
                                   PageTransition(
@@ -104,15 +105,18 @@ class EmailView extends StatelessWidget {
                   child: SizedBox(
                     width: 70,
                     height: 70,
-                    child: MaterialButton(onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: PasswordView(),
-                              type: PageTransitionType.fade,
-                              duration: Duration(milliseconds: 250)));
-                    }, color: Colors.amber,
-                    child: Icon(Icons.navigate_next),),
+                    child: MaterialButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: const PasswordView(),
+                                type: PageTransitionType.fade,
+                                duration: const Duration(milliseconds: 250)));
+                      },
+                      color: Colors.amber,
+                      child: const Icon(Icons.navigate_next),
+                    ),
                   ),
                 ),
               ),

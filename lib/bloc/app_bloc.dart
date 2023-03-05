@@ -1,22 +1,23 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, depend_on_referenced_packages
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:login/auth/auth.dart';
 import 'package:login/auth/auth_error.dart';
 
+import '../repositories/auth_repo.dart';
 part 'app_event.dart';
 part 'app_state.dart';
-
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc() : super(AppStateLoggedOut(isLoading: false, successful: false)) {
+  final AuthRepository _authRepository;
+
+  AppBloc(this._authRepository)
+      : super(AppStateLoggedOut(isLoading: false, successful: false)) {
     on<AppEventLogIn>((event, emit) async {
       emit(AppStateLoggedOut(isLoading: true, successful: false));
       try {
-        await Auth().signInWithEmailAndPassword(
+        await _authRepository.signInWithEmailAndPassword(
             email: event.email, password: event.password);
         emit(AppStateLoggedIn(isLoading: false, successful: true));
       } on FirebaseAuthException catch (e) {
@@ -29,17 +30,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventLogOut>((event, emit) async {
       emit(AppStateLoggedOut(isLoading: true, successful: false));
       try {
-        await Auth().signOut();
+        await _authRepository.signOut();
         emit(AppStateLoggedOut(isLoading: false, successful: true));
-      } on FirebaseAuthException catch (e) {
-        
-      }
+      } on FirebaseAuthException catch (_) {}
     });
 
     on<AppEventRegister>((event, emit) async {
       emit(AppStateLoggedOut(isLoading: true, successful: false));
       try {
-        await Auth().createUserWithEmailAndPassword(
+        await _authRepository.createUserWithEmailAndPassword(
             email: event.email, password: event.password);
         emit(AppStateLoggedIn(isLoading: false, successful: true));
       } on FirebaseAuthException catch (e) {
@@ -52,8 +51,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventResetPassword>((event, emit) async {
       emit(AppStateLoggedOut(isLoading: true, successful: false));
       try {
-        await Auth().sendResetPasswordEmail(
-            email: event.email);
+        await _authRepository.sendResetPasswordEmail(email: event.email);
         emit(AppStateLoggedIn(isLoading: false, successful: true));
       } on FirebaseAuthException catch (e) {
         print(e);

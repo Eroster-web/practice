@@ -27,11 +27,11 @@ class _PasswordViewState extends State<PasswordView> {
       body: Center(
         child: Column(
           children: [
-            Padding(
+          const  Padding(
               padding: EdgeInsets.only(bottom: 50),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 25, bottom: 25),
+              padding:const EdgeInsets.only(left: 25, bottom: 25),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
@@ -54,15 +54,17 @@ class _PasswordViewState extends State<PasswordView> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 25),
+              padding:const EdgeInsets.only(left: 25),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
                     Icon(
-                      Icons.password,
+                      Icons.lock,
                       color: Colors.grey.shade500,
+                      size: 30,
                     ),
+                   const SizedBox(width: 20),
                     SizedBox(
                       height: 50,
                       width: 250,
@@ -77,8 +79,9 @@ class _PasswordViewState extends State<PasswordView> {
                                 visiblePassword = !visiblePassword;
                               });
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.remove_red_eye,
+                              color: visiblePassword ? Colors.grey.shade500 : Colors.black,
                             ),
                           ),
                           focusedBorder: const UnderlineInputBorder(
@@ -99,11 +102,11 @@ class _PasswordViewState extends State<PasswordView> {
             BlocBuilder<AppBloc, AppState>(
               builder: (context, state) {
                 return Padding(
-                  padding: EdgeInsets.only(top: 50),
+                  padding: const EdgeInsets.only(top: 50),
                   child: Align(
                     alignment: Alignment.center,
                     child: state.isLoading
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator.adaptive()
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: SizedBox(
@@ -119,7 +122,7 @@ class _PasswordViewState extends State<PasswordView> {
                                     .popUntil((route) => route.isFirst);
                               },
                               color: Colors.amber,
-                              child: Text('Confirm'),
+                              child: const Text('Confirm'),
                               ),
                             ),
                           ),

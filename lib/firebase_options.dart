@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
+import 'api_keys.dart';
+
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -47,7 +49,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCl7wQeraCIGIDUjumpUYmF3M3VV4qBKf0',
+    apiKey: webApi,
     appId: '1:146261778283:web:697653eb84e4ac3061f62e',
     messagingSenderId: '146261778283',
     projectId: 'login-page-fd716',
@@ -56,7 +58,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDR9fWAAFRWHCQbJqUjJwtqsgJ5yjnbIEc',
+    apiKey: androidApi,
     appId: '1:146261778283:android:0a443f5b6765bd1c61f62e',
     messagingSenderId: '146261778283',
     projectId: 'login-page-fd716',
@@ -64,7 +66,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCh6EZVt9L-xyrurSxfxaCevxleSOC-kjs',
+    apiKey: iOsApi,
     appId: '1:146261778283:ios:f1e368251e793bcc61f62e',
     messagingSenderId: '146261778283',
     projectId: 'login-page-fd716',
