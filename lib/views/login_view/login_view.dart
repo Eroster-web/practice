@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login/controllers/email_and_password_controller.dart';
 
+import '../../auth/auth_error.dart';
 import '../../bloc/app_bloc.dart';
+import '../home_view/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -16,7 +19,192 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
-        return Scaffold();
+        if (state is AppStateLoggedIn) {
+          return const HomeView();
+        }
+        if (state is AppStateLoggedOut) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              iconTheme: const IconThemeData(
+                color: Colors.black,
+              ),
+              elevation: 0,
+              backgroundColor: Colors.white.withOpacity(0),
+            ),
+            body: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      bottom: 50,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25, bottom: 25),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Login',
+                            style: TextStyle(
+                                fontSize: 35, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Insert your E-mail and password to login',
+                            style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.alternate_email,
+                            color: Colors.grey.shade500,
+                          ),
+                          const SizedBox(
+                            width: 35,
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: 250,
+                            child: TextField(
+                              controller: emailcontroller,
+                              autofocus: true,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                focusedBorder: const UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.amber)),
+                                hintText: 'E-mail',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey.shade500),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.grey.shade500),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 25,
+                      top: 20,
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.lock,
+                            color: Colors.grey.shade500,
+                          ),
+                          const SizedBox(
+                            width: 35,
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: 250,
+                            child: TextField(
+                              onSubmitted: (value) {
+                                context.read<AppBloc>().add(AppEventLogIn(
+                                    email: emailcontroller.text,
+                                    password: passwordcontroller.text));
+                              },
+                              controller: passwordcontroller,
+                              autofocus: true,
+                              obscureText: visiblePassword,
+                              decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      Icons.remove_red_eye,
+                                      color: visiblePassword
+                                          ? Colors.grey.shade500
+                                          : Colors.black,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        visiblePassword = !visiblePassword;
+                                      });
+                                    },
+                                  ),
+                                  focusedBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.amber),
+                                  ),
+                                  hintText: 'Password',
+                                  hintStyle:
+                                      TextStyle(color: Colors.grey.shade500),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.grey.shade500))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: authErrorlogin != ''
+                        ? Text(
+                            textAlign: TextAlign.center,
+                            authErrorlogin.split(']')[1],
+                            style: const TextStyle(
+                                color: Colors.red, fontWeight: FontWeight.bold))
+                        : null,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 25,left: 20),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          state.isLoading
+                              ? const CircularProgressIndicator.adaptive()
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: SizedBox(
+                                    width: 250,
+                                    height: 50,
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        context.read<AppBloc>().add(
+                                            AppEventLogIn(
+                                                email: emailcontroller.text,
+                                                password:
+                                                    passwordcontroller.text));
+                                      },
+                                      color: Colors.amber,
+                                      child:const Text('Login'),
+                                    ),
+                                  ),
+                                ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }
